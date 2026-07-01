@@ -1,6 +1,7 @@
 package com.logplatform.common.client;
 
 
+import com.logplatform.common.context.TraceContext;
 import com.logplatform.common.dto.LogRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -23,7 +24,7 @@ public class LogClient {
         service,
         level,
         message,
-        UUID.randomUUID().toString()
+        TraceContext.getTraceId()
     );
 
     try {
