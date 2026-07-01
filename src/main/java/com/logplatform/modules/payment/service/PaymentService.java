@@ -1,6 +1,6 @@
 package com.logplatform.modules.payment.service;
 
-import com.logplatform.modules.payment.LogClient;
+import com.logplatform.common.client.LogClient;
 import com.logplatform.modules.payment.dto.PaymentRequest;
 import com.logplatform.modules.payment.dto.PaymentResponse;
 import com.logplatform.modules.payment.entity.Payment;

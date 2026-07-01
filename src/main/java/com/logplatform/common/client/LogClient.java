@@ -1,4 +1,5 @@
-package com.logplatform.modules.payment;
+package com.logplatform.common.client;
+
 
 import com.logplatform.common.dto.LogRequest;
 import org.springframework.stereotype.Component;
