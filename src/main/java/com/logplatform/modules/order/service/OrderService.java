@@ -5,11 +5,12 @@ import com.logplatform.modules.order.dto.OrderRequest;
 import com.logplatform.modules.order.dto.OrderResponse;
 import com.logplatform.modules.order.entity.Order;
 import com.logplatform.modules.order.repository.OrderRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
+@Slf4j
 @Service
 public class OrderService {
 
@@ -23,15 +24,13 @@ public class OrderService {
 
   public OrderResponse createOrder(OrderRequest request) {
 
-    String traceId = UUID.randomUUID().toString();
-
-    logClient.sendLog("order-service", "INFO", "Order request received");
+    logClient.sendLog("order-service", "INFO", "Order creation started");
 
     try {
 
-      if (request.quantity() <= 0) {
-        logClient.sendLog("order-service", "ERROR", "Invalid quantity");
-        return new OrderResponse("FAILED", "Invalid quantity");
+      if (request.quantity() == null || request.quantity() <= 0) {
+        logClient.sendLog("order-service", "ERROR", "Invalid order quantity");
+        return new OrderResponse("FAILED", "Quantity must be greater than 0");
       }
 
       Order order = new Order();
@@ -41,17 +40,16 @@ public class OrderService {
       order.setStatus("PLACED");
       order.setCreatedAt(LocalDateTime.now());
 
-      orderRepository.save(order);
+      Order savedOrder = orderRepository.save(order);
 
-      logClient.sendLog("order-service", "INFO", "Order placed successfully");
-
+      logClient.sendLog("order-service", "INFO", "Order saved successfully. OrderId=" + savedOrder.getId());
       return new OrderResponse("SUCCESS", "Order created");
 
-    } catch (Exception e) {
+    } catch (RuntimeException ex) {
 
-      logClient.sendLog("order-service", "ERROR", e.getMessage());
-
-      return new OrderResponse("ERROR", "Something went wrong");
+      log.error("Order creation failed", ex);
+      logClient.sendLog("order-service", "ERROR", "Order creation failed: " + ex.getMessage());
+      return new OrderResponse("ERROR", "Order processing failed");
     }
   }
 }
