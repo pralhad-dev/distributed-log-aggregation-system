@@ -25,7 +25,7 @@ public class LogController {
     return new ResponseEntity<>(logService.createLogs(logRequest), HttpStatus.CREATED);
   }
 
-  @GetMapping
+  @GetMapping("/fetch-logs")
   public ResponseEntity<GlobalApiResponse<List<LogResponse>>> getLogs() {
     return new ResponseEntity<>(logService.findAllLogs(), HttpStatus.OK);
   }
