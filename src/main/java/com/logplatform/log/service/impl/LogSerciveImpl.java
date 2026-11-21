@@ -32,10 +32,11 @@ public class LogSerciveImpl implements LogService {
   }
 
   @Override
-  public GlobalApiResponse<LogRequest> createLogs(LogRequest logRequest) throws DataNotFoundException {
+  public GlobalApiResponse<LogRequest> createLogs(LogRequest logRequest)   {
     GlobalApiResponse<LogRequest> response = new GlobalApiResponse<>();
     logsValidate.validateLogs(logRequest);
 
+    //testing
     LogEvent logEvent = new LogEvent();
     logEvent.setLevel(logRequest.level());
     logEvent.setMessage(logRequest.message());
